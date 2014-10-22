@@ -263,9 +263,12 @@ def load_classes(package_path):
 
 def find_in_sys_path(path):
     for base in sys.path:
+        path = path.replace(".","/") # replace . with / to follow FIT Table format
         rel_path = os.path.join(base, path)
         if os.path.exists(rel_path):
             return rel_path
+        if os.path.exists(rel_path+".py"): # kind of misleading naming but...
+            return rel_path+".py" # if we only load one py file...
     return None
 
 

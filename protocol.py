@@ -12,6 +12,7 @@ from .slim_exceptions import WaferSlimException
 from .execution import Results, ExecutionContext, Instructions
 import re
 import six
+import sys
 
 BYTE_ENCODING = 'utf-8'  # can be altered by server startup options
 BUFFER_SIZE = 4098
@@ -123,9 +124,11 @@ def _pack_item(item):
     if isinstance(item, list):
         return _pack_item(pack(item))
     if isinstance(item, str):
-        item = item.decode(BYTE_ENCODING, 'replace')
-    if isinstance(item, unicode):
+        if sys.version_info.major<3:
+            item = item.decode(BYTE_ENCODING, 'replace')
+
         return _ITEM_ENCODING % (len(item), _SEPARATOR, item)
+
     raise TypeError('%r is not a string' % item)
 
 
